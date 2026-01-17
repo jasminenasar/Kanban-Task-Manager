@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import DashboardUI from "../components/DashboardUI"; //UI
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
+  const [status, setStatus] = useState("todo");
+  const [dark, setDark] = useState(false);
   const navigate = useNavigate();
 
   // 🔹 FETCH TASKS
@@ -27,11 +30,12 @@ function Dashboard() {
   // 🔹 ADD TASK
   const addTask = async (e) => {
     e.preventDefault();
-    if (!title) return;
+    if (!title.trim()) return;
 
     try {
-      await API.post("/tasks", { title, status: "todo" });
+      await API.post("/tasks", { title, status });
       setTitle("");
+      setStatus("todo");
       fetchTasks(); // refresh list
     } catch (error) {
       alert("Failed to add task");
@@ -43,40 +47,37 @@ function Dashboard() {
     await API.delete(`/tasks/${id}`);
     fetchTasks();
   };
+  const moveTask = async (id, newStatus) => {
+    try {
+      await API.put(`/tasks/${id}`, { status: newStatus });
+      fetchTasks();
+    } catch {
+      alert("Failed to update task status");
+    }
+  };
 
   //LOGOUT
   const logout = () => {
   localStorage.removeItem("token");
   window.location.href = "/login";
 };
-
+  const toggleDark = () => setDark(!dark);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Dashboard</h2>
-      <button onClick={logout}>Logout</button>
-
-      <hr />
-
-      <form onSubmit={addTask}>
-        <input
-          type="text"
-          placeholder="Enter task"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <button type="submit">Add Task</button>
-      </form>
-
-      <ul>
-        {tasks.map((task) => (
-          <li key={task._id}>
-            {task.title} ({task.status})
-            <button onClick={() => deleteTask(task._id)}>❌</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+   
+    <DashboardUI
+      tasks={tasks}
+      title={title}
+      setTitle={setTitle}
+      status={status}
+      setStatus={setStatus}
+      addTask={addTask}
+      deleteTask={deleteTask}
+      logout={logout}
+      dark={dark}
+      toggleDark={toggleDark}
+      moveTask={moveTask}
+    />
   );
 }
 

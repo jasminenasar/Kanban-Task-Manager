@@ -1,23 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../api/axios";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-     // TODO: call login API here
-    console.log("Login submitted");
 
-    // TEMP: navigate after successful login
-    navigate("/dashboard");
+    try{
+        const res = await API.post("/auth/login", {email,password});
+         // 🔥 THIS IS THE MOST IMPORTANT LINE
+        localStorage.setItem("token", res.data.token);
+        console.log("Login submitted");
+         navigate("/dashboard");
+         console.log("Email:",email);
+         console.log("Password:",password);
+         
+    }
+   catch (err) {
+       console.error("Login error response:", err.response?.data);
+       alert(err.response?.data?.message || "Login failed");
+  }
 
-    // Temporary check (later connect backend API)
-    console.log("Email:", email);
-    console.log("Password:", password);
   };
 
   return (

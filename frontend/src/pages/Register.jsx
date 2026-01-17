@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../api/axios";
+import { Link } from "react-router-dom";
+
 
 function Register() {
   const [name, setName] = useState("");
@@ -7,21 +10,19 @@ function Register() {
   const [password, setPassword] = useState("");
    const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-
-    // TODO: call register API here
-    console.log("Register submitted");
-
-    // TEMP: navigate after successful register
-    navigate("/");
-
-    // Temporary check (later connect backend API)
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Password:", password);
+    try{
+      await API.post("/auth/register",{
+        name,
+        email,
+        password,
+      });
+       navigate("/");
+    }catch (err) {
+      alert("Registration failed");
+  }
   };
-
   return (
     <div style={styles.container}>
       <h2>Register</h2>
@@ -59,7 +60,7 @@ function Register() {
         </button>
         <p>
   Already have an account?{" "}
-  <a href="/">Login</a>
+  <Link to="/">Login</Link>
 </p>
 
 

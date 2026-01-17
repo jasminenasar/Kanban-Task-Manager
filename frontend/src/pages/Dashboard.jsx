@@ -1,47 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import API from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+  const [tasks, setTasks] = useState([]);
+  const [title, setTitle] = useState("");
+  const navigate = useNavigate();
+
+  // 🔹 FETCH TASKS
+  const fetchTasks = async () => {
+    try {
+      const res = await API.get("/tasks");
+      setTasks(res.data);
+    } catch (error) {
+      console.error(error);
+      alert("Session expired. Please login again.");
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  // 🔹 ADD TASK
+  const addTask = async (e) => {
+    e.preventDefault();
+    if (!title) return;
+
+    try {
+      await API.post("/tasks", { title, status: "todo" });
+      setTitle("");
+      fetchTasks(); // refresh list
+    } catch (error) {
+      alert("Failed to add task");
+    }
+  };
+
+  // 🔹 DELETE TASK
+  const deleteTask = async (id) => {
+    await API.delete(`/tasks/${id}`);
+    fetchTasks();
+  };
+
+  //LOGOUT
+  const logout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
+};
+
+
   return (
-    <div style={styles.container}>
+    <div style={{ padding: "20px" }}>
       <h2>Dashboard</h2>
-      <p>Welcome to your Kanban Task Manager 🎯</p>
+      <button onClick={logout}>Logout</button>
 
-      <div style={styles.cards}>
-        <div style={styles.card}>
-          <h3>Today</h3>
-          <p>0 Tasks</p>
-        </div>
+      <hr />
 
-        <div style={styles.card}>
-          <h3>This Week</h3>
-          <p>0 Tasks</p>
-        </div>
+      <form onSubmit={addTask}>
+        <input
+          type="text"
+          placeholder="Enter task"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <button type="submit">Add Task</button>
+      </form>
 
-        <div style={styles.card}>
-          <h3>Later</h3>
-          <p>0 Tasks</p>
-        </div>
-      </div>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task._id}>
+            {task.title} ({task.status})
+            <button onClick={() => deleteTask(task._id)}>❌</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-const styles = {
-  container: {
-    padding: "40px",
-  },
-  cards: {
-    display: "flex",
-    gap: "20px",
-    marginTop: "20px",
-  },
-  card: {
-    flex: 1,
-    padding: "20px",
-    backgroundColor: "#f1f5f9",
-    borderRadius: "8px",
-    textAlign: "center",
-  },
-};
-
 export default Dashboard;
+
+
+
+
+

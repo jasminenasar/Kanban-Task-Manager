@@ -22,7 +22,7 @@ const getTasks = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-// ✅ UPDATE TASK (THIS WAS MISSING EARLIER)
+//  UPDATE TASK (THIS WAS MISSING EARLIER)
 const updateTask = async (req, res) => {
   try {
     const { status, title } = req.body;
@@ -53,7 +53,7 @@ const deleteTask = async (req, res) => {
   }
 };
 
-// ✅ SINGLE EXPORT (IMPORTANT)
+//  SINGLE EXPORT (IMPORTANT)
 module.exports = {
   createTask,
   getTasks,

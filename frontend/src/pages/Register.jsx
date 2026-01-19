@@ -25,7 +25,7 @@ function Register() {
   };
   return (
     <div style={styles.container}>
-      <h2>Register</h2>
+      <h2 class="text-2xl font-semibold text-center py-4">Register</h2>
 
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
@@ -60,7 +60,7 @@ function Register() {
         </button>
         <p>
   Already have an account?{" "}
-  <Link to="/">Login</Link>
+  <Link to="/" class="text-blue-600 hover:text-blue-800 font-medium">Login</Link>
 </p>
 
 
@@ -83,6 +83,7 @@ const styles = {
   input: {
     padding: "10px",
     fontSize: "14px",
+    border:"1px solid black",
   },
   button: {
     padding: "10px",

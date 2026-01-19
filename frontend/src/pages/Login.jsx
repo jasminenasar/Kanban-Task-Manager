@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
+import { Link } from "react-router-dom";
+import { TypeOutline } from "lucide-react";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -12,7 +14,6 @@ function Login() {
 
     try{
         const res = await API.post("/auth/login", {email,password});
-         // 🔥 THIS IS THE MOST IMPORTANT LINE
         localStorage.setItem("token", res.data.token);
         console.log("Login submitted");
          navigate("/dashboard");
@@ -29,7 +30,7 @@ function Login() {
 
   return (
     <div style={styles.container}>
-      <h2>Login</h2>
+      <h2 class="text-2xl font-semibold text-center py-4">Login</h2>
 
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
@@ -55,7 +56,7 @@ function Login() {
         </button>
        < p>
   Don’t have an account?{" "}
-  <a href="/register">Register</a>
+  <Link to="/register" class="text-blue-600 hover:text-blue-800 font-medium">Register</Link>
 </p>
       </form>
     </div>
@@ -76,6 +77,8 @@ const styles = {
   input: {
     padding: "10px",
     fontSize: "14px",
+    border:"1px solid black",
+   
   },
   button: {
     padding: "10px",

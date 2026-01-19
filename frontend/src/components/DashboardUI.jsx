@@ -52,7 +52,8 @@ export default function DashboardUI({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Enter task title"
-          className="flex-1 border rounded-xl px-4 py-2 focus:ring-2 focus:ring-indigo-400"
+          className="w-1/2 px-3 py-2 border border-gray-300 rounded-md
+         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         <select
           value={status}

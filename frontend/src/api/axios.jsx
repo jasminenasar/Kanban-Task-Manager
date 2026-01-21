@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://kanban-task-manager-23py.onrender.com/api",
 });
 
 // attach token automatically

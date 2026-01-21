@@ -5,24 +5,37 @@ const connectDB = require("./config/db");
 
 dotenv.config();
 
+// ✅ CREATE APP FIRST
 const app = express();
 
-// Middleware
-app.use(cors());
+// ✅ CORS CONFIG (MUST BE AFTER app IS CREATED)
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://task-friend.netlify.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+
+// ✅ JSON MIDDLEWARE
 app.use(express.json());
 
-// Connect DB
+// ✅ CONNECT DATABASE
 connectDB();
 
-// Test route
+// ✅ TEST ROUTE
 app.get("/", (req, res) => {
-  res.send("Kanban Backend API is running ");
+  res.send("Kanban Backend API is running");
 });
 
-// Routes
-app.use("/api/auth", require("./routes/routes.js"));
-app.use("/api/tasks", require("./routes/taskroutes.js"));
+// ✅ ROUTES
+app.use("/api/auth", require("./routes/routes"));
+app.use("/api/tasks", require("./routes/taskroutes"));
 
+// ✅ START SERVER
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

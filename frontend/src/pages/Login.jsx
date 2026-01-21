@@ -30,7 +30,7 @@ function Login() {
 
   return (
     <div style={styles.container}>
-      <h2 class="text-2xl font-semibold text-center py-4">Login</h2>
+      <h2 className="text-2xl font-semibold text-center py-4">Login</h2>
 
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
@@ -56,7 +56,7 @@ function Login() {
         </button>
        < p>
   Don’t have an account?{" "}
-  <Link to="/register" class="text-blue-600 hover:text-blue-800 font-medium">Register</Link>
+  <Link to="/register" className="text-blue-600 hover:text-blue-800 font-medium">Register</Link>
 </p>
       </form>
     </div>
